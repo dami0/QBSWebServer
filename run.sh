@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 #this is the directory the script is running in
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -13,8 +13,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ########################
 
 #Get the date the Docker File and requirements file was last edited
-dcdate=$(stat -f "%Sm" -t "%Y%m%d%H%M%S"  Dockerfile)
-reqdate=$(stat -f "%Sm" -t "%Y%m%d%H%M%S"  requirements.txt)
+dcdate=$(stat -c "%Y"  Dockerfile)
+reqdate=$(stat -c "%Y" requirements.txt)
 
 #If requirements were modified after the Dockerfile use that date instead
 if [ "$reqdate" -gt  "$dcdate" ]
@@ -42,7 +42,7 @@ fi
 #-rm removes the container when done
 #-i -t interactive mode for bash
 #bash at the end tells it to put us in a shell
-docker run -v ~/.aws:/root/.aws -v ~/.ssh:/root/.ssh  -v $DIR/src:/root/src --rm   -i -t qbswebserver:$dcdate bash 
+docker run -v $HOME/.aws:/root/.aws -v $HOME/.ssh:/root/.ssh  -v $DIR/src:/root/src  -i -t qbswebserver:$dcdate bash 
 
 
 #TODO: once this is all built we will change from going to a shell to having an entry point script that just runs
