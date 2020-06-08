@@ -42,7 +42,8 @@ fi
 #-rm removes the container when done
 #-i -t interactive mode for bash
 #bash at the end tells it to put us in a shell
-docker run -v $HOME/.aws:/root/.aws -v $HOME/.ssh:/root/.ssh  -v $DIR/src:/root/src  -i -t qbswebserver:$dcdate bash 
+echo $DIR
+docker run -v $HOME/.aws:/root/.aws -v $HOME/.aws_ssh:/root/.ssh  -v $DIR/src:/root/src  -i -t qbswebserver:$dcdate bash 
 
 
 #TODO: once this is all built we will change from going to a shell to having an entry point script that just runs

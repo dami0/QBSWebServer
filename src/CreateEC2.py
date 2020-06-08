@@ -48,16 +48,18 @@ ec2cf = open( '/root/src/EC2InstanceWithSecurityGroupSample.template' , 'r').rea
 #Create the CloudFormation for the EC2 Instance
 stackname = 'qbswebserver' + str(int(epoch))
 print('Creating stack id ' + stackname)
-response = cf_client.create_stack(
-    StackName=stackname,
-    TemplateBody=ec2cf,
-    Parameters=[
-        { 'ParameterKey': 'KeyName', 'ParameterValue': 'webmail' },
-        { 'ParameterKey': 'InstanceType', 'ParameterValue': 't2.micro' },
-    ],
-    OnFailure='ROLLBACK'
-)
-
+try:
+    response = cf_client.create_stack(
+        StackName=stackname,
+        TemplateBody=ec2cf,
+        Parameters=[
+            { 'ParameterKey': 'KeyName', 'ParameterValue': 'webmail' },
+            { 'ParameterKey': 'InstanceType', 'ParameterValue': 't2.micro' },
+        ],
+        OnFailure='ROLLBACK'
+    )
+except Exception as e:
+    print("Stack creation response: %s" % e)
 
 print('##################################################################################################')
 print('RESPONSE FROM CREATE:')
@@ -70,6 +72,7 @@ stackstatus = "CREATE_IN_PROGRESS"
 while (stackstatus == 'CREATE_IN_PROGRESS'):
 	time.sleep(5)
 	response = cf_client.describe_stacks( StackName=stackname) 
+	print(response)
 	stackstatus = response['Stacks'][0]['StackStatus']
 	print("----Checking Creation Status: " + stackstatus)
 

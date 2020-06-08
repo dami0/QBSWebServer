@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 
 CMD ["pip", "freeze"]
 
-ENTRYPOINT /root/src/CreateEC2.py
+ENTRYPOINT /bin/bash
