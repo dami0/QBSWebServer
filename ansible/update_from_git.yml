@@ -4,13 +4,14 @@
   hosts: localhost
   vars:
     git_username: dami0
+    git_branch: webmail_playbook
   tasks:
 
     - git:
         repo: "https://github.com/{{ git_username }}/QBSWebServer.git"
         dest: /home/ubuntu/QBSWebServer
         update: yes
-        version: master
+        version: "{{ git_branch }}"
 
     # might be cleaner running it through a system service, default cron implementation doesn't handle reboots well
     - cron:
@@ -23,4 +24,10 @@
         job: "/usr/bin/ansible-playbook --connection=local /home/ubuntu/QBSWebServer/ansible/update_from_git.yml"
         #become_user: "{{ admin_user }}"
       become_user: "ubuntu"
+
+    - name: "QMail installation"
+       become: yes
+       apt:
+         name: "qmail"
+
 ...
