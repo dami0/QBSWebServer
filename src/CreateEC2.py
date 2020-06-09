@@ -44,6 +44,9 @@ if qbsip == "":
 #Read in the cloud formation, we might generate it in the future, or need to keep it on s3 later
 ec2cf = open( '/root/src/EC2InstanceWithSecurityGroupSample.template' , 'r').read()
 
+#TODO: fix this into a proper global variable config
+#this is used later on to connect, changing so that filename and AWS entry are the same
+keyname="webmail"
 
 #Create the CloudFormation for the EC2 Instance
 stackname = 'qbswebserver' + str(int(epoch))
@@ -53,7 +56,7 @@ try:
         StackName=stackname,
         TemplateBody=ec2cf,
         Parameters=[
-            { 'ParameterKey': 'KeyName', 'ParameterValue': 'webmail' },
+            { 'ParameterKey': 'KeyName', 'ParameterValue': keyname },
             { 'ParameterKey': 'InstanceType', 'ParameterValue': 't2.micro' },
         ],
         OnFailure='ROLLBACK'
@@ -108,7 +111,7 @@ print('#########################################################################
 
 #####install ansible
 time.sleep(15) #Wait for SSH Deamon to come up
-connectstr = ' -o StrictHostKeyChecking=no  -i ~/.ssh/qbsweb1.pem '
+connectstr = ' -o StrictHostKeyChecking=no  -i ~/.ssh/%s.pem ' % keyname
 connecthost = ' ubuntu@' + hostip 
 sshconnectstr = 'ssh ' + connectstr + ' ' + connecthost
 scpconnectstr = 'scp ' + connectstr
