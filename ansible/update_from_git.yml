@@ -26,8 +26,8 @@
       become_user: "ubuntu"
 
     - name: "QMail installation"
-       become: yes
-       apt:
-         name: "qmail"
+      become: yes
+      apt:
+        name: "qmail"
 
 ...
