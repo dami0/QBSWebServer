@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 #this is the directory the script is running in
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
